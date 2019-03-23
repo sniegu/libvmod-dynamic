@@ -173,7 +173,8 @@ $Object director(
 	DURATION domain_usage_timeout	= 7200,
 	DURATION first_lookup_timeout	= 10,
 	INT max_connections		= 0,
-	INT proxy_header		= 0)
+	INT proxy_header		= 0,
+	BACKEND via			= NULL)
 
 Description
 	Create a DNS director.
@@ -229,6 +230,10 @@ Parameters to set attributes of backends
 	- *max_connections* (defaults to zero, unlimited)
 	- *proxy_header* - version of the PROXY protocol to use, or zero
 	  to disable it (defaults to zero, valid versions are one or two)
+	- *via* backend to make the connection through with an
+	  additional PROXY protocol header containing the actual
+	  address to connect to. Primary use case is SSL/TLS onloading
+	  via haproxy.
 
 .. raw:: pdf
 

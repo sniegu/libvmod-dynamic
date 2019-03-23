@@ -384,7 +384,7 @@ dynamic_add(VRT_CTX, struct dynamic_domain *dom, struct suckaddr *sa,
 		WRONG("unexpected family");
 	}
 
-	b->dir = VRT_new_backend(ctx, &vrt);
+	b->dir = VRT_new_backend(ctx, &vrt, dom->obj->via);
 	AN(b->dir);
 
 	DBG(ctx, dom, "add-backend %s", b->vcl_name);
@@ -832,7 +832,8 @@ vmod_director__init(VRT_CTX,
     VCL_DURATION domain_usage_timeout,
     VCL_DURATION first_lookup_timeout,
     VCL_INT max_connections,
-    VCL_INT proxy_header)
+    VCL_INT proxy_header,
+    VCL_BACKEND via)
 {
 	struct vmod_dynamic_director *obj;
 
@@ -899,6 +900,7 @@ vmod_director__init(VRT_CTX,
 	obj->first_lookup_tmo = first_lookup_timeout;
 	obj->max_connections = (unsigned)max_connections;
 	obj->proxy_header = (unsigned)proxy_header;
+	obj->via = via;
 
 	Lck_New(&obj->mtx, lck_dir);
 
