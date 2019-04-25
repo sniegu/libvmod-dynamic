@@ -102,7 +102,6 @@ struct vmod_dynamic_director {
 	VTAILQ_HEAD(,dynamic_backend)		backends;
 	const char				*vcl_conf;
 	struct vcl				*vcl;
-	struct vclref				*vclref;
 	volatile unsigned			active;
 	volatile unsigned			debug;
 };

@@ -620,7 +620,7 @@ dynamic_stop(struct vmod_dynamic_director *obj)
 
 	INIT_OBJ(&ctx, VRT_CTX_MAGIC);
 	ctx.vcl = obj->vcl;
-	VRT_rel_vcl(&ctx, &obj->vclref);
+	VRT_VCL_Unbusy(&ctx);
 }
 
 static void
@@ -631,12 +631,10 @@ dynamic_start(struct vmod_dynamic_director *obj)
 
 	ASSERT_CLI();
 	CHECK_OBJ_NOTNULL(obj, VMOD_DYNAMIC_DIRECTOR_MAGIC);
-	AZ(obj->vclref);
 
 	INIT_OBJ(&ctx, VRT_CTX_MAGIC);
 	ctx.vcl = obj->vcl;
-	/* XXX: name it "dynamic director %s" instead */
-	obj->vclref = VRT_ref_vcl(&ctx, "vmod dynamic");
+	VRT_VCL_Busy(&ctx);
 
 	Lck_Lock(&obj->mtx);
 	VTAILQ_FOREACH(dom, &obj->active_domains, list) {
